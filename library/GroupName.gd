@@ -1,11 +1,9 @@
 extends Node
 
+const DWARF: String = "dwarf"
+const PC: String = "pc"
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+const FLOOR: String = "floor"
+const WALL: String = "wall"
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+const ARROW: String = "arrow"

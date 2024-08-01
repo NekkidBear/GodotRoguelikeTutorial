@@ -1,3 +1,8 @@
-[gd_scene format=3 uid="uid://y28whp7mgg4e"]
+[gd_scene load_steps=2 format=3 uid="uid://y28whp7mgg4e"]
+
+[ext_resource type="Script" path="res://scene/main/InitWorld.gd" id="1_da03c"]
 
 [node name="MainScene" type="Node2D"]
+
+[node name="InitWorld" type="Node2D" parent="."]
+script = ExtResource("1_da03c")
