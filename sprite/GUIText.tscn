@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://csht17jleansa"]
+
+[ext_resource type="FontFile" uid="uid://d16bbvsjvm7q1" path="res://resource/FiraCode-Regular.ttf" id="1_fu2i6"]
+
+[node name="Modeline" type="Label"]
+theme_override_colors/font_color = Color(0.670588, 0.698039, 0.74902, 1)
+theme_override_fonts/font = ExtResource("1_fu2i6")

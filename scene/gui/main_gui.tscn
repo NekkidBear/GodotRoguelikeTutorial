@@ -1,36 +1,29 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://bcs1iqpxhbtc6"]
 
-[ext_resource path="res://resource/FiraCode-Regular.ttf" type="DynamicFontData" id=1]
+[ext_resource type="PackedScene" uid="uid://csht17jleansa" path="res://sprite/GUIText.tscn" id="1_jg3dp"]
+[ext_resource type="Script" path="res://sprite/Modeline.gd" id="2_fssuw"]
+[ext_resource type="Script" path="res://scene/gui/SidebarVBox.gd" id="2_s2n33"]
 
-[sub_resource type="DynamicFont" id=1]
-size = 24
-font_data = ExtResource( 1 )
+[node name="MainGUI" type="MarginContainer"]
 
-[sub_resource type="DynamicFont" id=2]
-size = 24
-font_data = ExtResource( 1 )
+[node name="MainHBox" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 8
 
-[node name="MainGUI" type="Control"]
-margin_right = 800.0
-margin_bottom = 600.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Modeline" parent="MainHBox" instance=ExtResource("1_jg3dp")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+script = ExtResource("2_fssuw")
 
-[node name="Bottom" type="Label" parent="."]
-margin_left = 30.0
-margin_top = 550.0
-margin_right = 210.0
-margin_bottom = 581.0
-custom_fonts/font = SubResource( 1 )
-custom_colors/font_color = Color( 0.670588, 0.698039, 0.74902, 1 )
-text = "Hello world!"
+[node name="SidebarVBox" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(180, 2.08165e-12)
+layout_mode = 2
+script = ExtResource("2_s2n33")
 
-[node name="Sidebar" type="Label" parent="."]
-margin_left = 635.0
-margin_top = 20.0
-margin_right = 755.0
-margin_bottom = 51.0
-custom_fonts/font = SubResource( 2 )
-custom_colors/font_color = Color( 0.670588, 0.698039, 0.74902, 1 )
-text = "Turn: 42"
+[node name="Turn" parent="SidebarVBox" instance=ExtResource("1_jg3dp")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Help" parent="SidebarVBox" instance=ExtResource("1_jg3dp")]
+layout_mode = 2
