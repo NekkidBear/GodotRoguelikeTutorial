@@ -5,15 +5,6 @@
 [ext_resource type="Script" path="res://scene/gui/SidebarVBox.gd" id="2_s2n33"]
 
 [node name="MainGUI" type="MarginContainer"]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -180.0
-offset_top = -44.0
-grow_horizontal = 0
-grow_vertical = 0
 scale = Vector2(1.00655, 1)
 
 [node name="MainHBox" type="HBoxContainer" parent="."]
@@ -22,7 +13,6 @@ size_flags_vertical = 8
 
 [node name="Modeline" parent="MainHBox" instance=ExtResource("1_jg3dp")]
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 8
 script = ExtResource("2_fssuw")
 
@@ -33,7 +23,8 @@ script = ExtResource("2_s2n33")
 
 [node name="Turn" parent="SidebarVBox" instance=ExtResource("1_jg3dp")]
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_vertical = 1
 
 [node name="Help" parent="SidebarVBox" instance=ExtResource("1_jg3dp")]
 layout_mode = 2
+size_flags_vertical = 3
