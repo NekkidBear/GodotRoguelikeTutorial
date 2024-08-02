@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://bvpjrrvndnimy" path="res://resource/curses_vector_24x36.png" id="1_bj27r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_guxea"]
+flags = 4
 atlas = ExtResource("1_bj27r")
 region = Rect2(0, 36, 24, 36)
 
