@@ -3,10 +3,12 @@
 [ext_resource type="Texture2D" uid="uid://bvpjrrvndnimy" path="res://resource/curses_vector_24x36.png" id="1_dkce4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yfm2k"]
+flags = 4
 atlas = ExtResource("1_dkce4")
 region = Rect2(96, 216, 24, 36)
 
 [node name="Dwarf" type="Sprite2D"]
 modulate = Color(0.670588, 0.698039, 0.74902, 1)
+z_index = 1
 position = Vector2(105, 0)
 texture = SubResource("AtlasTexture_yfm2k")

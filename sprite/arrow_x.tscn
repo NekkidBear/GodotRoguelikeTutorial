@@ -7,5 +7,6 @@ atlas = ExtResource("1_bj27r")
 region = Rect2(0, 36, 24, 36)
 
 [node name="ArrowX" type="Sprite2D"]
+modulate = Color( 0.670588, 0.698039, 0.74902, 1)
 position = Vector2(5, 42)
 texture = SubResource("AtlasTexture_guxea")
