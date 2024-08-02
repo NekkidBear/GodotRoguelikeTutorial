@@ -21,7 +21,6 @@ func _unhandled_input(event: InputEvent) -> void:
         _init_PC()
         _init_dwarf()
         _init_indicator()
-
         set_process_unhandled_input(false)
 
 func _init_dwarf() -> void:
@@ -43,7 +42,6 @@ func _init_wall() -> void:
     var max_x: int = _new_DungeonSize.CENTER_X + shift + 1
     var min_y: int = _new_DungeonSize.CENTER_Y - shift
     var max_y: int = _new_DungeonSize.CENTER_Y + shift + 1
-
     for i in range(min_x, max_x):
         for j in range(min_y, max_y):
             _create_sprite(Wall, _new_GroupName.WALL, i, j)
@@ -56,6 +54,5 @@ func _create_sprite(prefab: PackedScene, group: String, x: int, y: int, x_offset
     var new_sprite: Sprite2D = prefab.instantiate() as Sprite2D
     new_sprite.position = _new_ConvertCoord.index_to_vector(x, y, x_offset, y_offset)
     new_sprite.add_to_group(group)
-
     add_child(new_sprite)
     emit_signal("sprite_created", new_sprite)
