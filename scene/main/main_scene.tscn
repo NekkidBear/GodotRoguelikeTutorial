@@ -13,31 +13,31 @@
 script/source = "extends Node2D
 
 func _ready():
-    # Ensure nodes are available before setting references
-    if $PCMove and $Schedule and $DungeonBoard:
-        $PCMove._ref_Schedule = $Schedule
-        $EnemyAI._ref_Schedule = $Schedule
-        $PCMove._ref_DungeonBoard = $DungeonBoard
-        
-        # Set references for PCAttack
-        if $PCAttack and $RemoveObject:
-            $PCAttack._ref_DungeonBoard = $DungeonBoard
-            $PCAttack._ref_Schedule = $Schedule
-            $PCAttack._ref_RemoveObject = $RemoveObject
-        
-        # Connect InitWorld signals
-        if $InitWorld:
-            $InitWorld.connect(\"sprite_created\", $PCMove._on_InitWorld_sprite_created)
-            $InitWorld.connect(\"sprite_created\", $Schedule._on_InitWorld_sprite_created)
-            $InitWorld.connect(\"sprite_created\", $DungeonBoard._on_InitWorld_sprite_created)
-        
-        # Connect Schedule signals
-        if $Schedule:
-            $Schedule.connect(\"turn_started\", $PCMove._on_Schedule_turn_started)
-            $Schedule.connect(\"turn_started\", $EnemyAI._on_Schedule_turn_started)
-            $Schedule.connect(\"turn_started\", $MainGUI/SidebarVBox._on_Schedule_turn_started)
-    else:
-        print(\"One or more nodes are not available in the scene tree.\")
+	# Ensure nodes are available before setting references
+	if $PCMove and $Schedule and $DungeonBoard:
+		$PCMove._ref_Schedule = $Schedule
+		$EnemyAI._ref_Schedule = $Schedule
+		$PCMove._ref_DungeonBoard = $DungeonBoard
+		
+		# Set references for PCAttack
+		if $PCAttack and $RemoveObject:
+			$PCAttack._ref_DungeonBoard = $DungeonBoard
+			$PCAttack._ref_Schedule = $Schedule
+			$PCAttack._ref_RemoveObject = $RemoveObject
+		
+		# Connect InitWorld signals
+		if $InitWorld:
+			$InitWorld.connect(\"sprite_created\", $PCMove._on_InitWorld_sprite_created)
+			$InitWorld.connect(\"sprite_created\", $Schedule._on_InitWorld_sprite_created)
+			$InitWorld.connect(\"sprite_created\", $DungeonBoard._on_InitWorld_sprite_created)
+		
+		# Connect Schedule signals
+		if $Schedule:
+			$Schedule.connect(\"turn_started\", $PCMove._on_Schedule_turn_started)
+			$Schedule.connect(\"turn_started\", $EnemyAI._on_Schedule_turn_started)
+			$Schedule.connect(\"turn_started\", $MainGUI/SidebarVBox._on_Schedule_turn_started)
+	else:
+		print(\"One or more nodes are not available in the scene tree.\")
 "
 
 [node name="MainScene" type="Node2D"]
