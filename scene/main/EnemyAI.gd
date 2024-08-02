@@ -22,6 +22,9 @@ func _on_Schedule_turn_started(current_sprite: Sprite2D) -> void:
 
 
 func _pc_is_close(source: Sprite2D, target: Sprite2D) -> bool:
+	if not source or not target:
+		return false
+		
 	var source_pos: Array = _new_ConvertCoord.vector_to_array(source.global_position)
 	var target_pos: Array = _new_ConvertCoord.vector_to_array(target.global_position)
 	var delta_x: int = abs(source_pos[0] - target_pos[0]) as int
