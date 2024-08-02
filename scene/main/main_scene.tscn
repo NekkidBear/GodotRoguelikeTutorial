@@ -13,6 +13,16 @@
 script/source = "extends Node2D
 
 func _ready():
+# Set references
+	$PCMove._ref_Schedule = $Schedule
+	$EnemyAI._ref_Schedule = $Schedule
+	$PCMove._ref_DungeonBoard = $DungeonBoard
+	
+	# Set references for PCAttack
+	$PCAttack._ref_DungeonBoard = $DungeonBoard
+	$PCAttack._ref_Schedule = $Schedule
+	$PCAttack._ref_RemoveObject = $RemoveObject
+	
 	# Connect InitWorld signals
 	$InitWorld.connect(\"sprite_created\", $PCMove._on_InitWorld_sprite_created)
 	$InitWorld.connect(\"sprite_created\", $Schedule._on_InitWorld_sprite_created)
@@ -25,17 +35,6 @@ func _ready():
 	# Connect MainGUI signals
 	$Schedule.connect(\"turn_started\", $MainGUI/SidebarVBox._on_Schedule_turn_started)
 	$Schedule.connect(\"turn_ended\", $MainGUI/MainHBox/Modeline._on_Schedule_turn_ended)
-	
-
-	# Set references
-	$PCMove._ref_Schedule = $Schedule
-	$EnemyAI._ref_Schedule = $Schedule
-	$PCMove._ref_DungeonBoard = $DungeonBoard
-	
-	# Set references for PCAttack
-	$PCAttack._ref_DungeonBoard = $DungeonBoard
-	$PCAttack._ref_Schedule = $Schedule
-	$PCAttack._ref_RemoveObject = $RemoveObject
 "
 
 [node name="MainScene" type="Node2D"]
