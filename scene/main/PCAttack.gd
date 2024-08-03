@@ -11,10 +11,6 @@ var _ref_DungeonBoard: DungeonBoard
 var _ref_Schedule: Schedule
 var _ref_RemoveObject: RemoveObject
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void: 
-	pass
-
 func attack(group_name: String, x: int, y: int) -> void:
 	# Ensure references are set
 	assert(_ref_DungeonBoard != null, "DungeonBoard reference not set")

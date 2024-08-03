@@ -34,7 +34,7 @@ func _goto_next() -> void:
 		_pointer = 0
 
 
-func _on_remove_object_sprite_removed(remove_sprite: Sprite2D, 
+func _on_RemoveObject_sprite_removed(remove_sprite: Sprite2D, 
 		group_name: String, x: int, y: int)->void:
 	var current_sprite: Sprite2D = _get_current()
 	

@@ -6,6 +6,7 @@ const DungeonBoard := preload("res://scene/main/DungeonBoard.gd")
 const Schedule := preload("res://scene/main/Schedule.gd")
 
 const PC_ATTACK: String = "PCAttack"
+const RELOAD_GAME: String = "ReloadGame"
 
 var _ref_DungeonBoard: DungeonBoard
 var _ref_Schedule: Schedule
@@ -34,8 +35,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _is_move_input(event):
 		target = _get_new_position(event, source)
 		_try_move(target[0], target[1])
+	elif _is_reload_input(event):
+		get_node(RELOAD_GAME).reload()
 
-
+func _is_reload_input(event):
+	if event.is_action_pressed(_new_InputName.RELOAD):
+		return true
+	return false
+	
 func _on_InitWorld_sprite_created(new_sprite: Sprite2D) -> void:
 	if new_sprite.is_in_group(_new_GroupName.PC):
 		_pc = new_sprite
@@ -57,7 +64,7 @@ func _is_move_input(event: InputEvent) -> bool:
 
 func _try_move(x: int, y: int) -> void:
 	if not _ref_DungeonBoard.is_inside_dungeon(x, y):
-		emit_signal("pc_moved", "You cannot leave map.")
+		emit_signal("pc_moved", "You cannot leave the map.")
 	elif _ref_DungeonBoard.has_sprite(_new_GroupName.WALL, x, y):
 		emit_signal("pc_moved", "You bumped into a wall.")
 	elif _ref_DungeonBoard.has_sprite(_new_GroupName.DWARF, x, y):

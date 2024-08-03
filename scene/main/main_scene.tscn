@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://y28whp7mgg4e"]
+[gd_scene load_steps=11 format=3 uid="uid://y28whp7mgg4e"]
 
 [ext_resource type="Script" path="res://scene/main/InitWorld.gd" id="1_da03c"]
 [ext_resource type="Script" path="res://scene/main/PCMove.gd" id="2_28t46"]
 [ext_resource type="PackedScene" uid="uid://bcs1iqpxhbtc6" path="res://scene/gui/main_gui.tscn" id="3_5a4wq"]
 [ext_resource type="Script" path="res://scene/main/PCAttack.gd" id="3_lcsrv"]
+[ext_resource type="Script" path="res://scene/main/ReloadGame.gd" id="3_t1b45"]
 [ext_resource type="Script" path="res://scene/main/Schedule.gd" id="4_rhgef"]
 [ext_resource type="Script" path="res://scene/main/EnemyAI.gd" id="5_w1hkw"]
 [ext_resource type="Script" path="res://scene/main/DungeonBoard.gd" id="6_uhagu"]
@@ -12,30 +13,58 @@
 [sub_resource type="GDScript" id="GDScript_mrqjp"]
 script/source = "extends Node2D
 
+func set_reference(node_path, property, reference_path):
+	var node = get_node(node_path)
+	var reference = get_node(reference_path)
+	if node and reference:
+		node.set(property, reference)
+	else:
+		if not node:
+			print(\"Node not found: \", node_path)
+		if not reference:
+			print(\"Reference not found: \", reference_path)
+
 func _ready():
 	# Ensure nodes are available before setting references
-	if $PCMove and $Schedule and $DungeonBoard:
-		$PCMove._ref_Schedule = $Schedule
-		$EnemyAI._ref_Schedule = $Schedule
-		$PCMove._ref_DungeonBoard = $DungeonBoard
+	set_reference(\"PCMove\", \"_ref_Schedule\", \"Schedule\")
+	set_reference(\"EnemyAI\", \"_ref_Schedule\", \"Schedule\")
+	set_reference(\"PCMove/PCAttack\", \"_ref_Schedule\", \"Schedule\")
+	
+	set_reference(\"PCMove\", \"_ref_DungeonBoard\", \"DungeonBoard\")
+	set_reference(\"PCMove/PCAttack\", \"_ref_DungeonBoard\", \"DungeonBoard\")
+	set_reference(\"RemoveObject\", \"_ref_DungeonBoard\", \"DungeonBoard\")
+	set_reference(\"InitWorld\", \"_ref_DungeonBoard\", \"DungeonBoard\")
+	
+	set_reference(\"PCMove/PCAttack\", \"_ref_RemoveObject\", \"RemoveObject\")
+
+	# Connect InitWorld signals
+	if $InitWorld:
+		$InitWorld.connect(\"sprite_created\", $PCMove._on_InitWorld_sprite_created)
+		$InitWorld.connect(\"sprite_created\", $Schedule._on_InitWorld_sprite_created)
+		$InitWorld.connect(\"sprite_created\", $DungeonBoard._on_InitWorld_sprite_created)
+		$InitWorld.connect(\"sprite_created\", $EnemyAI._on_init_world_sprite_created)
 		
-		# Set references for PCAttack
-		if $PCAttack and $RemoveObject:
-			$PCAttack._ref_DungeonBoard = $DungeonBoard
-			$PCAttack._ref_Schedule = $Schedule
-			$PCAttack._ref_RemoveObject = $RemoveObject
+	# Connect RemoveObject signals
+	if $RemoveObject:
+		$RemoveObject.connect(\"sprite_removed\", $Schedule._on_RemoveObject_sprite_removed)
+		$RemoveObject.connect(\"sprite_removed\", $DungeonBoard._on_RemoveObject_sprite_removed)
+	
+	# Connect Schedule signals
+	if $Schedule:
+		$Schedule.connect(\"turn_started\", $PCMove._on_Schedule_turn_started)
+		$Schedule.connect(\"turn_started\", $EnemyAI._on_Schedule_turn_started)
+		$Schedule.connect(\"turn_started\", $MainGUI/SidebarVBox._on_Schedule_turn_started)
+		$Schedule.connect(\"turn_ended\", $MainGUI/MainHBox/Modeline._on_Schedule_turn_ended)
+	
+		# Connect PCMove signals
+	if $PCMove:
+		$PCMove.connect(\"pc_moved\", $MainGUI/MainHBox/Modeline._on_PCMove_pc_moved)
+		$PCMove/PCAttack.connect(\"pc_attacked\", $MainGUI/MainHBox/Modeline._on_PCAttack_pc_attacked)
 		
-		# Connect InitWorld signals
-		if $InitWorld:
-			$InitWorld.connect(\"sprite_created\", $PCMove._on_InitWorld_sprite_created)
-			$InitWorld.connect(\"sprite_created\", $Schedule._on_InitWorld_sprite_created)
-			$InitWorld.connect(\"sprite_created\", $DungeonBoard._on_InitWorld_sprite_created)
-		
-		# Connect Schedule signals
-		if $Schedule:
-			$Schedule.connect(\"turn_started\", $PCMove._on_Schedule_turn_started)
-			$Schedule.connect(\"turn_started\", $EnemyAI._on_Schedule_turn_started)
-			$Schedule.connect(\"turn_started\", $MainGUI/SidebarVBox._on_Schedule_turn_started)
+	# Connect EnemyAI signals
+	if $EnemyAI:
+		$EnemyAI.connect(\"enemy_warned\", $MainGUI/MainHBox/Modeline._on_EnemyAI_enemy_warned)
+		 
 	else:
 		print(\"One or more nodes are not available in the scene tree.\")
 "
@@ -48,6 +77,9 @@ script = ExtResource("1_da03c")
 
 [node name="PCMove" type="Node2D" parent="."]
 script = ExtResource("2_28t46")
+
+[node name="ReloadGame" type="Node2D" parent="PCMove"]
+script = ExtResource("3_t1b45")
 
 [node name="PCAttack" type="Node" parent="PCMove"]
 script = ExtResource("3_lcsrv")
