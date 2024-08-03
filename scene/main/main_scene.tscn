@@ -11,62 +11,76 @@
 [ext_resource type="Script" path="res://scene/main/RemoveObject.gd" id="8_eeafx"]
 
 [sub_resource type="GDScript" id="GDScript_mrqjp"]
-script/source = "extends Node2D
+script/source = "extends \"res://library/RootNodeTemplate.gd\"
 
-func set_reference(node_path, property, reference_path):
-	var node = get_node(node_path)
-	var reference = get_node(reference_path)
-	if node and reference:
-		node.set(property, reference)
-	else:
-		if not node:
-			print(\"Node not found: \", node_path)
-		if not reference:
-			print(\"Reference not found: \", reference_path)
+const INIT_WORLD: String = \"InitWorld\"
+const PC_MOVE: String = \"PCMove\"
+const PC_ATTACK: String = \"PCMove/PCAttack\"
+const NPC: String = \"EnemyAI\"
+const SCHEDULE: String = \"Schedule\"
+const DUNGEON: String = \"DungeonBoard\"
+const REMOVE: String = \"RemoveObject\"
+const SIDEBAR: String = \"MainGUI/MainHBox/SidebarVBox\"
+const MODELINE: String = \"MainGUI/MainHBox/Modeline\"
 
-func _ready():
-	# Ensure nodes are available before setting references
-	set_reference(\"PCMove\", \"_ref_Schedule\", \"Schedule\")
-	set_reference(\"EnemyAI\", \"_ref_Schedule\", \"Schedule\")
-	set_reference(\"PCMove/PCAttack\", \"_ref_Schedule\", \"Schedule\")
-	
-	set_reference(\"PCMove\", \"_ref_DungeonBoard\", \"DungeonBoard\")
-	set_reference(\"PCMove/PCAttack\", \"_ref_DungeonBoard\", \"DungeonBoard\")
-	set_reference(\"RemoveObject\", \"_ref_DungeonBoard\", \"DungeonBoard\")
-	set_reference(\"InitWorld\", \"_ref_DungeonBoard\", \"DungeonBoard\")
-	
-	set_reference(\"PCMove/PCAttack\", \"_ref_RemoveObject\", \"RemoveObject\")
+const SIGNAL_BIND: Array = [
+    [
+        \"sprite_created\", \"_on_InitWorld_sprite_created\",
+        INIT_WORLD,
+        PC_MOVE, NPC, SCHEDULE, DUNGEON,
+    ],
+    [
+        \"turn_started\", \"_on_Schedule_turn_started\",
+        SCHEDULE,
+        PC_MOVE, NPC, SIDEBAR,
+    ],
+    [
+        \"turn_ended\", \"_on_Schedule_turn_ended\",
+        SCHEDULE,
+        MODELINE,
+    ],
+    [
+        \"sprite_removed\", \"_on_RemoveObject_sprite_removed\",
+        REMOVE,
+        DUNGEON, SCHEDULE,
+    ],
+    [
+        \"enemy_warned\", \"_on_EnemyAI_enemy_warned\",
+        NPC,
+        MODELINE,
+    ],
+    [
+        \"pc_moved\", \"_on_PCMove_pc_moved\",
+        PC_MOVE,
+        MODELINE,
+    ],
+    [
+        \"pc_attacked\", \"_on_PCAttack_pc_attacked\",
+        PC_ATTACK,
+        MODELINE,
+    ],
+]
 
-	# Connect InitWorld signals
-	if $InitWorld:
-		$InitWorld.connect(\"sprite_created\", $PCMove._on_InitWorld_sprite_created)
-		$InitWorld.connect(\"sprite_created\", $Schedule._on_InitWorld_sprite_created)
-		$InitWorld.connect(\"sprite_created\", $DungeonBoard._on_InitWorld_sprite_created)
-		$InitWorld.connect(\"sprite_created\", $EnemyAI._on_init_world_sprite_created)
-		
-	# Connect RemoveObject signals
-	if $RemoveObject:
-		$RemoveObject.connect(\"sprite_removed\", $Schedule._on_RemoveObject_sprite_removed)
-		$RemoveObject.connect(\"sprite_removed\", $DungeonBoard._on_RemoveObject_sprite_removed)
-	
-	# Connect Schedule signals
-	if $Schedule:
-		$Schedule.connect(\"turn_started\", $PCMove._on_Schedule_turn_started)
-		$Schedule.connect(\"turn_started\", $EnemyAI._on_Schedule_turn_started)
-		$Schedule.connect(\"turn_started\", $MainGUI/SidebarVBox._on_Schedule_turn_started)
-		$Schedule.connect(\"turn_ended\", $MainGUI/MainHBox/Modeline._on_Schedule_turn_ended)
-	
-		# Connect PCMove signals
-	if $PCMove:
-		$PCMove.connect(\"pc_moved\", $MainGUI/MainHBox/Modeline._on_PCMove_pc_moved)
-		$PCMove/PCAttack.connect(\"pc_attacked\", $MainGUI/MainHBox/Modeline._on_PCAttack_pc_attacked)
-		
-	# Connect EnemyAI signals
-	if $EnemyAI:
-		$EnemyAI.connect(\"enemy_warned\", $MainGUI/MainHBox/Modeline._on_EnemyAI_enemy_warned)
-		 
-	else:
-		print(\"One or more nodes are not available in the scene tree.\")
+const NODE_REF: Array = [
+    [
+        \"_ref_DungeonBoard\",
+        DUNGEON,
+        PC_MOVE, PC_ATTACK, REMOVE, INIT_WORLD,
+    ],
+    [
+        \"_ref_Schedule\",
+        SCHEDULE,
+        PC_MOVE, NPC, PC_ATTACK,
+    ],
+    [
+        \"_ref_RemoveObject\",
+        REMOVE,
+        PC_ATTACK,
+    ],
+]
+
+func _init() -> void:
+    pass
 "
 
 [node name="MainScene" type="Node2D"]
